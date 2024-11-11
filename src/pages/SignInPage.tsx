@@ -1,14 +1,14 @@
 
-import {Input} from "../components/input.tsx";
+import {Input} from "../components/tailframes/input.tsx";
 import {UserIcon} from "../assets/user-icon.tsx";
-import {Label} from "../components/label.tsx";
-import {Button} from "../components/button.tsx";
+import {Label} from "../components/tailframes/label.tsx";
+import {Button} from "../components/tailframes/button.tsx";
 import {LockIcon} from "../assets/lock-icon.tsx";
 import {Link} from "react-router-dom";
 const SignInPage = () => {
     return (
         <div className={'flex justify-center h-lvh items-center'}>
-            <div style={{maxHeight: 522}}>
+            <form style={{maxHeight: 522}}>
                 <div style={{width: 300}}>
                     <div className={'flex justify-center'}>
                         <img src={'./src/assets/logo.svg'} alt={'MEET TRACKER'}/>
@@ -49,7 +49,7 @@ const SignInPage = () => {
                         <Link to={'/signup'}>Зарегистрироваться</Link>
                     </Button>
                 </div>
-            </div>
+            </form>
 
         </div>
     );
