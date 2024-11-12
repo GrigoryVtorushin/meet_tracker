@@ -31,9 +31,7 @@ export const register = (data: IUser) => {
                 email: data.email,
                 password: data.password
             })
-            dispatch(loginSuccess({
-                user: {}
-            }))
+            console.log(response)
 
         } catch (error) {
             console.log(error)

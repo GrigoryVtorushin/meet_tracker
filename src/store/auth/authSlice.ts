@@ -1,25 +1,20 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IUser} from "../../types/interfaces.ts";
 
 export interface User {
     email: string;
-    id?: string;
-    is_active?: boolean;
+    id: string;
+    is_active: boolean;
 }
 interface IAuthStatePayload {
-    isAuth?: boolean,
+    isAuth: boolean,
     accessToken?: string,
     user: User
 }
 
 const initialState: IAuthStatePayload = {
-    isAuth: false,
-    accessToken: '',
-    user: {
-        email: '',
-        id: '',
-        is_active: false,
-    }
+    isAuth: !!localStorage.getItem('token'),
+    accessToken: localStorage.getItem('token') ?? '',
+    user: JSON.parse(localStorage.getItem('user')) ?? {} as User
 }
 
 const authSlice = createSlice({
@@ -31,14 +26,10 @@ const authSlice = createSlice({
             state.isAuth = !!action.payload.accessToken;
             state.user = action.payload.user;
             localStorage.setItem('token', state.accessToken);
-            localStorage.setItem('user', state.user);
+            localStorage.setItem('user', JSON.stringify(state.user));
         },
         logout(state) {
-            state.user = {
-                email: '',
-                id: '',
-                is_active: false,
-            };
+            state.user = {} as User;
             state.isAuth = false;
             state.accessToken = '';
             localStorage.removeItem('token');

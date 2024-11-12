@@ -16,7 +16,8 @@ const SignUpPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useAppDispatch()
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault();
         dispatch(register({
             email: email,
             password: password,
@@ -76,7 +77,7 @@ const SignUpPage = () => {
                             type={"submit"}
                             className={'w-full mt-12'}
                             variant="primary"
-                            onSubmit={onSubmit}
+                            onClick={onSubmit}
                         >
                             Зарегистрироваться
                         </Button>

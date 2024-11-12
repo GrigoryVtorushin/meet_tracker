@@ -8,9 +8,6 @@ export function BurgerIcon(props: SVGProps<SVGSVGElement>) {
           viewBox="0 0 32 32"
           fill="none"
           stroke="white"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
           {...props}
       >
         <path d="M5.33301 8H26.6663M5.33301 16H26.6663M5.33301 24H26.6663" />
