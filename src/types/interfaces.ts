@@ -1,7 +1,5 @@
-export interface IMeeting {
-
-}
 
 export interface IUser {
-
+    email: string,
+    password: string,
 }

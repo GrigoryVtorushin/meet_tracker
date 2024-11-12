@@ -5,11 +5,23 @@ import {LockIcon} from "../assets/lock-icon.tsx";
 import {Button} from "../components/tailframes/button.tsx";
 import {Link} from "react-router-dom";
 import {useState} from "react";
+import {register} from "../store/auth/authActionCreator.ts";
+import {useAppDispatch} from "../hooks/useAppDispatch.ts";
+import {AppDispatch} from "../store/store.ts";
 
 
 const SignUpPage = () => {
 
-
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const dispatch = useAppDispatch()
+    const onSubmit = () => {
+        dispatch(register({
+            email: email,
+            password: password,
+        }))
+    }
     return (
         <div>
             <div className={'flex justify-center h-lvh items-center h-lvh'}>
@@ -28,6 +40,7 @@ const SignUpPage = () => {
                                 placeholder="Введите почту"
                                 startAdornment={<UserIcon stroke="inherit" />}
                                 containerClassName="max-w-sm"
+                                onChange={e => setEmail(e.target.value)}
                             />
                         </div>
 
@@ -39,6 +52,9 @@ const SignUpPage = () => {
                                 placeholder="Введите пароль"
                                 startAdornment={<LockIcon stroke="inherit" />}
                                 containerClassName="max-w-sm"
+                                required
+                                minLength={8}
+                                onChange={e => setPassword(e.target.value)}
                             />
                         </div>
 
@@ -50,11 +66,19 @@ const SignUpPage = () => {
                                 placeholder="Повторите пароль"
                                 startAdornment={<LockIcon stroke="inherit" />}
                                 containerClassName="max-w-sm"
+                                required
+                                minLength={8}
+                                onChange={e => setConfirmPassword(e.target.value)}
                             />
                         </div>
 
-                        <Button className={'w-full mt-12'} variant="primary">
-                            Войти
+                        <Button
+                            type={"submit"}
+                            className={'w-full mt-12'}
+                            variant="primary"
+                            onSubmit={onSubmit}
+                        >
+                            Зарегистрироваться
                         </Button>
 
                     </div>

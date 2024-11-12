@@ -1,10 +1,7 @@
-
 import LetsStart from "../components/LetsStart.tsx";
 import LeftMenu from "../components/LeftMenu.tsx";
 import {useState} from "react";
 import {BurgerIcon} from "../assets/burger-icon.tsx";
-import clsx from "clsx";
-
 
 const MainPage = () => {
     const [showLeftMenu, setShowLeftMenu] = useState(true)
