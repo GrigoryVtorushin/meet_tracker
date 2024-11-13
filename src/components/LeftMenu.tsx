@@ -1,11 +1,11 @@
 import {CircleArrowLeftIcon} from "../assets/circle-arrow-left-icon.tsx";
 import {Button} from "./tailframes/button.tsx";
 import {BurgerIcon} from "../assets/burger-icon.tsx";
-import clsx from "clsx";
 import {useAuth} from "../hooks/useAuth.ts";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {logout} from "../store/auth/authSlice.ts";
 import {useState} from "react";
+import CustomModal from "./CustomModal.tsx";
 
 const LeftMenu = ({ setShowLeftMenu }) => {
     const dispatch = useAppDispatch()
@@ -28,7 +28,7 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                     <div className={'font-bold pl-2'}>{user.email}</div>
                 </div>
                 <div className={'flex items-center'}>
-                    <CircleArrowLeftIcon onClick={handleLogout} className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer'}/>
+                    <CircleArrowLeftIcon onClick={() => setIsModalOpen(true)} className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer'}/>
                 </div>
             </div>
 
@@ -49,7 +49,32 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                     <p>2024</p>
                 </div>
             </div>
+            <CustomModal
+                active={isModalOpen}
+                setActive={setIsModalOpen}
+            >
+                <div>
+                    <h1 className={'text-2xl font-semibold mb-8'}>Выйти из аккаунта?</h1>
+                    <div className={'mb-10'}>
+                        <div>
+                            Вы действительно хотите покинуть эту страницу?
+                        </div>
+                        <div>
+                            Данные могут не сохраниться.
+                        </div>
+                    </div>
 
+                    <div className={'flex sm:flex-row flex-col justify-end'}>
+                        <Button className={'sm:w-1/4 text-black bg-white hover:bg-zinc-400 active:bg-zinc-500 sm:mr-3 sm:mb-0 mb-3'} onClick={() => setIsModalOpen(false)}>
+                            Оставаться
+                        </Button>
+                        <Button className={'sm:w-1/4 bg-red-500 hover:bg-red-700 active:bg-red-800'} onClick={handleLogout}>
+                            Выйти
+                        </Button>
+                    </div>
+                </div>
+
+            </CustomModal>
         </div>
     );
 };
