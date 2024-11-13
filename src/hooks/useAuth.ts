@@ -1,12 +1,12 @@
-import {useSelector} from "react-redux";
+
+import {useAppSelector} from "./useAppDispatch.ts";
 
 export function useAuth() {
-    const {email, accessToken, id} = useSelector(state => state.user);
-
+    const { accessToken, isAuth, user, logError } = useAppSelector(state => state.auth)
     return {
-        isAuth: !!accessToken,
-        email,
         accessToken,
-        id,
+        isAuth,
+        user,
+        logError
     };
 }

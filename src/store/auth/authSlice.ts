@@ -3,12 +3,14 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 export interface User {
     email: string;
     id: string;
-    is_active: boolean;
+    role: string;
+    is_banned: boolean;
 }
 interface IAuthStatePayload {
     isAuth: boolean,
     accessToken?: string,
-    user: User
+    user: User,
+    logError?: string
 }
 
 const initialState: IAuthStatePayload = {
@@ -23,8 +25,10 @@ const authSlice = createSlice({
     reducers: {
         loginSuccess(state, action: PayloadAction<IAuthStatePayload>) {
             state.accessToken = action.payload.accessToken;
-            state.isAuth = !!action.payload.accessToken;
             state.user = action.payload.user;
+            state.isAuth = !!action.payload.accessToken;
+            state.logError = ''
+            localStorage.removeItem('logError')
             localStorage.setItem('token', state.accessToken);
             localStorage.setItem('user', JSON.stringify(state.user));
         },
@@ -34,9 +38,13 @@ const authSlice = createSlice({
             state.accessToken = '';
             localStorage.removeItem('token');
             localStorage.removeItem('user');
+        },
+        loginError(state, action: PayloadAction<IAuthStatePayload>) {
+            state.logError = action.payload.logError;
+            localStorage.setItem('logError', state.logError)
         }
     }
 })
 
-export const { loginSuccess, logout } = authSlice.actions
+export const { loginSuccess, logout, loginError } = authSlice.actions
 export default authSlice.reducer

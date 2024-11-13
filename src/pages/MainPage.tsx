@@ -2,11 +2,13 @@ import LetsStart from "../components/LetsStart.tsx";
 import LeftMenu from "../components/LeftMenu.tsx";
 import {useState} from "react";
 import {BurgerIcon} from "../assets/burger-icon.tsx";
+import {Navigate} from "react-router-dom";
+import {useAppSelector} from "../hooks/useAppDispatch.ts";
 
 const MainPage = () => {
-    const [showLeftMenu, setShowLeftMenu] = useState(true)
-
-    return (
+    const [showLeftMenu, setShowLeftMenu] = useState(true);
+    const { isAuth } = useAppSelector(state => state.auth)
+    return isAuth ? (
         <div className={'flex flex-row'}>
             <div style={{backgroundColor: '#18181B'}} className={` h-lvh transition-all duration-300 ${showLeftMenu ? 'translate-x-0 basis-1/4 fixed sm:relative' : '-translate-x-full fixed'}`}>
                 <LeftMenu
@@ -26,7 +28,7 @@ const MainPage = () => {
                 <LetsStart/>
             </div>
         </div>
-    );
+    ): <Navigate replace to={'signin'}/>;
 };
 
 export default MainPage;

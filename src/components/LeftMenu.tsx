@@ -2,8 +2,16 @@ import {CircleArrowLeftIcon} from "../assets/circle-arrow-left-icon.tsx";
 import {Button} from "./tailframes/button.tsx";
 import {BurgerIcon} from "../assets/burger-icon.tsx";
 import clsx from "clsx";
+import {useAuth} from "../hooks/useAuth.ts";
+import {useAppDispatch} from "../hooks/useAppDispatch.ts";
+import {logout} from "../store/auth/authSlice.ts";
 
 const LeftMenu = ({ setShowLeftMenu }) => {
+    const dispatch = useAppDispatch()
+    const { user } = useAuth();
+    const handleLogout = () => {
+        dispatch(logout())
+    }
 
     return (
         <div className={'px-5 py-8 h-full flex flex-col'}>
@@ -16,10 +24,10 @@ const LeftMenu = ({ setShowLeftMenu }) => {
 
                 <div className={'flex items-center'}>
                     <img src={'./src/assets/Avatar.svg'} alt={'avatar'}/>
-                    <div className={'font-bold pl-2'}>Почта</div>
+                    <div className={'font-bold pl-2'}>{user.email}</div>
                 </div>
                 <div className={'flex items-center'}>
-                    <CircleArrowLeftIcon className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer'}/>
+                    <CircleArrowLeftIcon onClick={handleLogout} className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer'}/>
                 </div>
             </div>
 
