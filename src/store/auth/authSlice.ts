@@ -42,9 +42,14 @@ const authSlice = createSlice({
         loginError(state, action: PayloadAction<IAuthStatePayload>) {
             state.logError = action.payload.logError;
             localStorage.setItem('logError', state.logError)
+        },
+        loginRefresh(state, action: PayloadAction<IAuthStatePayload>) {
+            state.accessToken = action.payload.accessToken
+            state.isAuth = !!action.payload.accessToken
+            localStorage.setItem('token', state.accessToken);
         }
     }
 })
 
-export const { loginSuccess, logout, loginError } = authSlice.actions
+export const { loginSuccess, logout, loginError, loginRefresh } = authSlice.actions
 export default authSlice.reducer

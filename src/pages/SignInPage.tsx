@@ -31,7 +31,7 @@ const SignInPage = () => {
         }
         else {
             setEmailError('Почта введена неверно')
-        };
+        }
     }
 
     return !isAuth ? (

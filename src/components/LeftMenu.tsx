@@ -5,6 +5,7 @@ import clsx from "clsx";
 import {useAuth} from "../hooks/useAuth.ts";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {logout} from "../store/auth/authSlice.ts";
+import {useState} from "react";
 
 const LeftMenu = ({ setShowLeftMenu }) => {
     const dispatch = useAppDispatch()
@@ -12,7 +13,7 @@ const LeftMenu = ({ setShowLeftMenu }) => {
     const handleLogout = () => {
         dispatch(logout())
     }
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <div className={'px-5 py-8 h-full flex flex-col'}>
             <div className={'flex justify-between'}>

@@ -1,13 +1,11 @@
 import {IUser} from "../../types/interfaces.ts";
 import {AppDispatch} from "../store.ts";
-import $api from "../../axios";
-import authSlice, {loginError, loginSuccess} from "./authSlice.ts";
-
+import $api, {API_URL} from "../../axios";
+import {loginError, loginRefresh, loginSuccess} from "./authSlice.ts";
+import axios from "axios";
 
 export const login = (data: IUser) => {
     return async (dispatch: AppDispatch) => {
-        console.log('log')
-
         try {
             const response = await $api.post('/login', {
                 email: data.email,
@@ -24,8 +22,6 @@ export const login = (data: IUser) => {
                     logError: 'Неверные данные аккаунта'
                 }))
             }
-
-            console.log(error)
         }
     }
 }
@@ -43,8 +39,21 @@ export const register = (data: IUser) => {
         } catch (error) {
             console.log(error)
         }
+    }
+}
 
-
+export const checkAuth = () => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            const response = await axios.post(`${API_URL}/refresh`, {}, {withCredentials: true});
+            dispatch(loginRefresh({
+                accessToken: response.data.access_token
+            }))
+        } catch (error) {
+            dispatch(loginRefresh({
+                accessToken: ''
+            }))
+        }
     }
 }
 
