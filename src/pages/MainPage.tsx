@@ -10,7 +10,7 @@ const MainPage = () => {
     const { isAuth } = useAppSelector(state => state.auth)
     return isAuth ? (
         <div className={'flex flex-row'}>
-            <div style={{backgroundColor: '#18181B'}} className={` h-lvh transition-all duration-300 ${showLeftMenu ? 'translate-x-0 basis-1/4 fixed sm:relative' : '-translate-x-full fixed'}`}>
+            <div style={{backgroundColor: '#18181B'}} className={` h-lvh max-w-80 transition-all duration-300 ${showLeftMenu ? 'translate-x-0 basis-2/5 fixed lg:relative' : '-translate-x-full fixed'}`}>
                 <LeftMenu
                     setShowLeftMenu={setShowLeftMenu}
                 />
