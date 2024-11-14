@@ -15,4 +15,4 @@ export function BurgerIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-BurgerIcon.displayName = 'CloseIcon';
+BurgerIcon.displayName = 'BurgerIcon';

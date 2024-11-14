@@ -1,0 +1,11 @@
+import type { SVGProps } from 'react';
+
+export function DeleteIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="white" {...props}>
+          <path d="M11.4071 10.4891L20.5922 10.4891L11.4071 10.4891ZM7.70338 10.4891L8.70747 24.195C8.80955 25.5884 9.96985 26.6668 11.367 26.6668H20.6323C22.0295 26.6668 23.1898 25.5884 23.2918 24.195L24.2959 10.4891L7.70338 10.4891ZM7.70338 10.4891H5.33301H7.70338ZM7.70338 10.4891L11.4071 10.4891L7.70338 10.4891ZM24.2959 10.4891H26.6663H24.2959ZM24.2959 10.4891H20.5922H24.2959ZM11.4071 10.4891V8.00016C11.4071 6.5274 12.601 5.3335 14.0738 5.3335H17.9255C19.3983 5.3335 20.5922 6.5274 20.5922 8.00016V10.4891L11.4071 10.4891Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+  );
+}
+
+DeleteIcon.displayName = 'DeleteIcon';

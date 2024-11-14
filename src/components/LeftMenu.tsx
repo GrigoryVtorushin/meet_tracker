@@ -17,16 +17,18 @@ const LeftMenu = ({ setShowLeftMenu }) => {
     return (
         <div className={'px-5 py-8 h-full flex flex-col'}>
             <div className={'flex justify-between'}>
-
-                <BurgerIcon
-                    className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer'}
-                    onClick={() => setShowLeftMenu(false)}
-                />
-
                 <div className={'flex items-center'}>
-                    <img src={'./src/assets/Avatar.svg'} alt={'avatar'}/>
-                    <div className={'font-bold pl-2'}>{user.email}</div>
+                    <BurgerIcon
+                        className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer mr-2'}
+                        onClick={() => setShowLeftMenu(false)}
+                    />
+
+                    <div className={'flex items-center'}>
+                        <img src={'./src/assets/Avatar.svg'} alt={'avatar'}/>
+                        <div className={'font-bold pl-2'}>{user.email}</div>
+                    </div>
                 </div>
+
                 <div className={'flex items-center'}>
                     <CircleArrowLeftIcon onClick={() => setIsModalOpen(true)} className={'hover:stroke-zinc-400 ease-in-out duration-150 cursor-pointer'}/>
                 </div>
