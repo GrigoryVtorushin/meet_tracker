@@ -1,7 +1,7 @@
 import {Button} from "./tailframes/button.tsx";
 import {useState} from "react";
 
-const LetsStart = () => {
+const LetsStart = ({setProcessingStarted}) => {
     const [fileIsLoaded, setFileIsLoaded] = useState(false);
     const [file, setFile] = useState();
     const [drag, setDrag] = useState(false);
@@ -70,7 +70,7 @@ const LetsStart = () => {
                                 {
                                     fileIsLoaded
                                         ? <div className={'px-10'}>
-                                            <Button className={'mb-5 w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500'}>
+                                            <Button className={'mb-5 w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500'} onClick={() => setProcessingStarted(true)}>
                                                 Начать расшифровку
                                             </Button>
                                             <label >

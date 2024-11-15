@@ -8,6 +8,7 @@ import FileProcessing from "../components/FileProcessing.tsx";
 
 const MainPage = () => {
     const [showLeftMenu, setShowLeftMenu] = useState(true);
+    const [processingStarted, setProcessingStarted] = useState(false)
     const { isAuth } = useAppSelector(state => state.auth)
     return isAuth ? (
         <div className={'flex flex-row'}>
@@ -26,8 +27,13 @@ const MainPage = () => {
             }
 
             <div className={'h-lvh w-full mx-0 sm:mx-4'}>
-                {/*<LetsStart/>*/}
-                <FileProcessing className={`flex w-full h-full`}/>
+                {processingStarted
+                    ? <FileProcessing setProcessingStarted={setProcessingStarted} className={`flex w-full h-full `}/>
+
+                    : <LetsStart setProcessingStarted={setProcessingStarted}/>
+                }
+
+
             </div>
         </div>
     ): <Navigate replace to={'signin'}/>;
