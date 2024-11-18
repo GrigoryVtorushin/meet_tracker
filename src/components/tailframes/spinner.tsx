@@ -72,7 +72,7 @@ export function Spinner({ size = 'medium', className, label, labelProps = {}, ..
           width='100%'
           height='100%'
           fill='none'
-          className='absolute animate-spin stroke-blue-700'
+          className='absolute animate-spin stroke-white'
           xmlns='http://www.w3.org/2000/svg'
           {...spinSVGProps[size]}
         >
