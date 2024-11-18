@@ -6,14 +6,21 @@ import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {logout} from "../store/auth/authSlice.ts";
 import {useState} from "react";
 import CustomModal from "./CustomModal.tsx";
+import {useMeetings} from "../hooks/useMeetings.ts";
+import {DotMenuIcon} from "../assets/dot-menu-icon.tsx";
+import MeetingsList from "./MeetingsList.tsx";
 
 const LeftMenu = ({ setShowLeftMenu }) => {
     const dispatch = useAppDispatch()
     const { user } = useAuth();
+    const { meetings } = useMeetings();
     const handleLogout = () => {
         dispatch(logout())
     }
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activeMeeting, setactiveMeeting] = useState('');
+
+
     return (
         <div className={'px-5 py-8 h-full flex flex-col'}>
             <div className={'flex justify-between'}>
@@ -40,9 +47,7 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                 </Button>
             </div>
 
-            <div>
-
-            </div>
+            <MeetingsList activeMeeting={activeMeeting} className={'overflow-y-scroll  mb-5'}/>
 
             <div className={'mt-auto'}>
                 <img className={'w-1/2'} src={'./src/assets/logo.svg'} alt={'MEET TRACKER'}/>
@@ -75,8 +80,9 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                         </Button>
                     </div>
                 </div>
-
             </CustomModal>
+
+
         </div>
     );
 };
