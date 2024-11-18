@@ -162,7 +162,6 @@ const UploadFile = ({setProcessingStarted}) => {
                                         className={'text-gray-400 underline mt-5 text-sm cursor-pointer'}
                                         onClick={() => {
                                             controller.abort();
-                                            setIsSuccess(false);
                                             setIsLoading(false);
                                         }}
                                     >
