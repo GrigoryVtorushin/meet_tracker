@@ -3,23 +3,56 @@ import CustomModal from "./CustomModal.tsx";
 import {Button} from "./tailframes/button.tsx";
 import {useState} from "react";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
-import {deleteMeeting, fetchMeetings} from "../store/meetings/meetingsActionCreator.ts";
+import {deleteMeeting, fetchMeetings, getMeetingById} from "../store/meetings/meetingsActionCreator.ts";
+import {useMeetings} from "../hooks/useMeetings.ts";
+import {EditIcon} from "../assets/edit-icon.tsx";
+import {DeleteIcon} from "../assets/delete-icon.tsx";
 
 const MeetingPreview = ({meeting}) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showDotMenu, setShowDotMenu] = useState(false);
+    const [showContext, setShowContext] = useState(false);
+    const [coords, setCoords] = useState({x: 0, y: 0});
     const dispatch = useAppDispatch();
-
+    const {currentMeeting} = useMeetings();
 
     return (
-        <>
-            <div className={`bg-zinc-700 rounded-lg px-4 py-2 mb-2 cursor-pointer`} key={meeting.title}>
+        <div>
+            <div onMouseEnter={() => setShowDotMenu(true)} onMouseLeave={() => setShowDotMenu(false)} onClick={() => dispatch(getMeetingById(meeting.id))} className={`rounded-lg mr-2 px-4 py-2 mb-2 cursor-pointer transition duration-300 ${currentMeeting !== null && currentMeeting.id === meeting.id ? 'bg-zinc-700 ' : ''}`}>
                 <div className={'flex justify-between '}>
-                    <div>
+                    <div className={'max-w-64 overflow-x-hidden text-nowrap'}>
                         {meeting.title}
                     </div>
-                    <DotMenuIcon className={'hover:stroke-zinc-400 cursor-pointer active:stroke-zinc-500 transition duration-300'} onClick={() => setIsModalOpen(true)}/>
+                    <DotMenuIcon className={` ${currentMeeting !== null && currentMeeting.id === meeting.id && 'stroke-zinc-300'} ${!showDotMenu && 'stroke-zinc-900'} hover:stroke-zinc-400 cursor-pointer active:stroke-zinc-500 transition duration-150`} onClick={(e) => {
+                        e.stopPropagation()
+                        setShowContext(true)
+                        setCoords({
+                            x: e.clientX,
+                            y: e.clientY
+                        })
+                    }}/>
+                </div>
 
+            </div>
+
+            <div hidden={!showContext} className={'h-lvh w-dvw absolute top-0 left-0'} onClick={() => setShowContext(false)}>
+                <div style={{top: coords.y, left: coords.x}} className={'bg-zinc-800 rounded-xl fixed font-semibold text-sm px-2 py-2 z-50'}>
+                    <div className={'flex cursor-pointer items-center px-2 py-2 rounded-lg transition duration-150 hover:bg-zinc-700'}>
+                        <EditIcon className={'w-6 pr-2'}/>
+                        <div>
+                            Переименовать
+                        </div>
+                    </div>
+                    <div className={'flex cursor-pointer items-center px-2 py-2 rounded-lg transition duration-150 hover:bg-zinc-700'}
+                         onClick={(e) => {
+                             e.stopPropagation()
+                             setIsModalOpen(true)
+                         }}
+                    >
+                        <DeleteIcon className={'stroke-red-500 w-6 pr-2'} />
+                        <div className={'text-red-500'}>Удалить</div>
+                    </div>
                 </div>
             </div>
 
@@ -58,7 +91,7 @@ const MeetingPreview = ({meeting}) => {
                     </div>
                 </div>
             </CustomModal>
-        </>
+        </div>
 
     );
 };

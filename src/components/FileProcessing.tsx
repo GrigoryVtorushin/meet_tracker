@@ -9,18 +9,18 @@ import {useState} from "react";
 import {Button} from "./tailframes/button.tsx";
 import {Link} from "react-router-dom";
 
-const FileProcessing = ({className, setProcessingStarted}) => {
+const FileProcessing = ({className, setProcessingStarted, }) => {
 
     const [error, setError] = useState(false);
 
     return (
         <div className={className}>
-            <div className={` mt-24 m-auto rounded-3xl bg-zinc-900 p-10 max-w-5xl h-full sm:left-0 sm:h-5/6 sm:mt-20 w-full -z-10`}>
+            <div className={`-z-10 mt-24 m-auto rounded-3xl bg-zinc-900 p-10 max-w-5xl h-full sm:left-0 sm:h-5/6 sm:mt-20 w-full`}>
                 <div className={'text-white flex justify-between'}>
                     <h1 className={'text-xl font-semibold sm:text-2xl'}>Название собрания</h1>
-                    <div className={'flex'}>
+                    <div className={'flex '}>
                         <EditIcon
-                            className={'hover:stroke-zinc-400 active:stroke-zinc-500 ease-in-out duration-150 cursor-pointer mr-6 '}/>
+                            className={'hover:stroke-zinc-400 active:stroke-zinc-500 ease-in-out duration-150 cursor-pointer mr-6'}/>
                         <DeleteIcon
                             className={'hover:stroke-zinc-400 active:stroke-zinc-500 ease-in-out duration-150 cursor-pointer'}/>
                     </div>
@@ -59,7 +59,8 @@ const FileProcessing = ({className, setProcessingStarted}) => {
                             </div>
                             <Button
                                 className={`text-white max-w-80 w-full my-8 hover:bg-zinc-400 hover:border-zinc-400 active:bg-zinc-500 active:duration-75`}
-                                variant={"outlined"}>
+                                variant={"outlined"}
+                            >
                                 Попробовать снова
                             </Button>
                             <div className={'text-gray-400 underline cursor-pointer'} onClick={() => setProcessingStarted(false)}>
@@ -71,8 +72,8 @@ const FileProcessing = ({className, setProcessingStarted}) => {
 
                     : <div className={'w-full h-full flex'}>
                         <div className={'m-auto max-w-md text-center'}>
-                            <div className={'flex justify-center mb-3'}>
-                                <Lottie className={'w-24'}  animationData={timeAnimatedIcon}></Lottie>
+                            <div className={'flex justify-center mb-3 h-24 '} >
+                                <Lottie className={'w-24'} animationData={timeAnimatedIcon}></Lottie>
                             </div>
 
                             <h2 className={'text-white text-xl mb-3'}>Идет обработка файла...</h2>

@@ -33,6 +33,7 @@ const authSlice = createSlice({
             localStorage.setItem('user', JSON.stringify(state.user));
         },
         logout(state) {
+
             state.user = {} as User;
             state.isAuth = false;
             state.accessToken = '';

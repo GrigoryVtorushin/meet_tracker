@@ -1,10 +1,11 @@
 import {Button} from "./tailframes/button.tsx";
-import {useState} from "react";
+import {useEffect, useReducer, useState} from "react";
 import $api from "../axios";
 import {Spinner} from "./tailframes/spinner.tsx";
 
 const controller = new AbortController();
-const UploadFile = ({setProcessingStarted}) => {
+const UploadFile = ({setProcessingStarted, setRenderUpdate, renderUpdate}) => {
+
     const [fileIsLoaded, setFileIsLoaded] = useState(false);
     const [file, setFile] = useState();
     const [drag, setDrag] = useState(false);
@@ -41,8 +42,9 @@ const UploadFile = ({setProcessingStarted}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false)
 
+
     const upload = async (fileData) => {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append('file', fileData)
         setIsLoading(true);
         $api.post('/meetings', formData, {
@@ -57,9 +59,13 @@ const UploadFile = ({setProcessingStarted}) => {
             console.log(response.data)
             setProcessingStarted(true);
             setIsLoading(false);
-        }).catch(error => {
-            console.log(error);
-            setError(true)
+        }).catch(err => {
+            setIsLoading(false);
+            setProgress(0);
+            if (err.status) {
+                setError(true);
+            }
+            console.log(err);
         })
     }
 
@@ -72,8 +78,8 @@ const UploadFile = ({setProcessingStarted}) => {
                         className={`lg:px-32 sm:px-16 px-6 py-8 rounded-lg border-zinc-400 flex ${drag ? 'border-2' : 'border-2 border-dashed'}`}>
                         <div className={'max-w-md text-center'}>
                             <div className={'px-2'}>
-                                <div className={'px-24 mb-3'}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"
+                                <div className={'mb-3'}>
+                                    <svg className={'mx-auto'} xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"
                                          fill="none">
                                         <path
                                             d="M63.1748 63.7476C62.1044 60.5428 60.0464 57.7596 57.2964 55.796C54.5464 53.8328 51.2456 52.7904 47.8668 52.8184C44.488 52.8464 41.2048 53.9436 38.488 55.952C35.771 57.9608 33.7596 60.778 32.7422 64M84 48C84 67.8824 67.8824 84 48 84C28.1178 84 12 67.8824 12 48C12 28.1178 28.1178 12 48 12C67.8824 12 84 28.1178 84 48ZM40 38C40 41.3136 37.3137 44 34 44C30.6863 44 28 41.3136 28 38C28 34.6863 30.6863 32 34 32C37.3137 32 40 34.6863 40 38ZM68 38C68 41.3136 65.3136 44 62 44C58.6864 44 56 41.3136 56 38C56 34.6863 58.6864 32 62 32C65.3136 32 68 34.6863 68 38Z"
@@ -83,7 +89,7 @@ const UploadFile = ({setProcessingStarted}) => {
                                 </div>
 
                                 <p style={{fontWeight: 500, fontSize: 20}}>
-                                    <div>Название файла</div>
+                                    <div>{file.name}</div>
                                 </p>
                             </div>
                             <div className={'mt-3 mb-8'}>
@@ -96,8 +102,9 @@ const UploadFile = ({setProcessingStarted}) => {
                                 variant={"outlined"}
                                 className={'text-white hover:bg-zinc-400 hover:border-zinc-400 active:bg-zinc-500 active:duration-75'}
                                 onClick={() => {
-                                    upload(file)
                                     setError(false)
+                                    upload(file)
+                                    console.log(file)
                                 }}
                             >
                                 Попробовать снова
@@ -162,7 +169,8 @@ const UploadFile = ({setProcessingStarted}) => {
                                         className={'text-gray-400 underline mt-5 text-sm cursor-pointer'}
                                         onClick={() => {
                                             controller.abort();
-                                            setIsLoading(false);
+                                            setRenderUpdate(renderUpdate + 1);
+
                                         }}
                                     >
                                         Отменить загрузку
@@ -175,7 +183,9 @@ const UploadFile = ({setProcessingStarted}) => {
                                             ? <div className={'px-10'}>
                                                 <Button
                                                     className={'mb-5 w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500'}
-                                                    onClick={() => upload(file)}>
+                                                    onClick={() => {
+                                                        upload(file)
+                                                    }}>
                                                     Начать расшифровку
                                                 </Button>
                                                 <label>

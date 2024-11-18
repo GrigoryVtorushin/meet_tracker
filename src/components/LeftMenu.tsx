@@ -4,25 +4,29 @@ import {BurgerIcon} from "../assets/burger-icon.tsx";
 import {useAuth} from "../hooks/useAuth.ts";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {logout} from "../store/auth/authSlice.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import CustomModal from "./CustomModal.tsx";
 import {useMeetings} from "../hooks/useMeetings.ts";
-import {DotMenuIcon} from "../assets/dot-menu-icon.tsx";
 import MeetingsList from "./MeetingsList.tsx";
+import {resetCurrentMeeting, resetMeetingState} from "../store/meetings/meetingsSlice.ts";
+import {fetchMeetings} from "../store/meetings/meetingsActionCreator.ts";
 
 const LeftMenu = ({ setShowLeftMenu }) => {
     const dispatch = useAppDispatch()
-    const { user } = useAuth();
-    const { meetings } = useMeetings();
+    const { user, accessToken } = useAuth();
+    const { meetings, currentMeeting} = useMeetings();
+    useEffect(() => {
+        dispatch(fetchMeetings())
+    }, [accessToken]);
     const handleLogout = () => {
         dispatch(logout())
+        dispatch(resetMeetingState())
     }
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [activeMeeting, setactiveMeeting] = useState('');
 
 
     return (
-        <div className={'px-5 py-8 h-full flex flex-col'}>
+        <div className={'px-5 py-8 h-full flex flex-col z-50'}>
             <div className={'flex justify-between'}>
                 <div className={'flex items-center'}>
                     <BurgerIcon
@@ -42,12 +46,14 @@ const LeftMenu = ({ setShowLeftMenu }) => {
             </div>
 
             <div className={'py-10'}>
-                <Button size={"medium"} className={'w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500'}>
+                <Button size={"medium"} className={'w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500'} onClick={() => {
+                    dispatch(resetCurrentMeeting())
+                }}>
                     Новая расшифровка
                 </Button>
             </div>
 
-            <MeetingsList activeMeeting={activeMeeting} className={'overflow-y-scroll  mb-5'}/>
+            <MeetingsList className={' mb-5 overflow-y-auto'}/>
 
             <div className={'mt-auto'}>
                 <img className={'w-1/2'} src={'./src/assets/logo.svg'} alt={'MEET TRACKER'}/>
@@ -60,7 +66,7 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                 active={isModalOpen}
                 setActive={setIsModalOpen}
             >
-                <div>
+                <div className={'z-50'}>
                     <h1 className={'text-2xl font-semibold mb-8'}>Выйти из аккаунта?</h1>
                     <div className={'mb-10'}>
                         <div>

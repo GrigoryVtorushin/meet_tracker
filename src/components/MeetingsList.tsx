@@ -6,16 +6,13 @@ import {useState} from "react";
 import MeetingPreview from "./MeetingPreview.tsx";
 
 
-const MeetingsList = ({ activeMeeting, className }) => {
-
+const MeetingsList = ({ className }) => {
     const { meetings } = useMeetings();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
 
     return(
         <div className={className}>
             {
-                meetings.map(meeting => <MeetingPreview meeting={meeting} />)
+                meetings.map(meeting => <MeetingPreview meeting={meeting} key={meeting.id}/>)
             }
         </div>
     )

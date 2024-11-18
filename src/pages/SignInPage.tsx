@@ -9,6 +9,7 @@ import {useState} from "react";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {login} from "../store/auth/authActionCreator.ts";
 import {useAuth} from "../hooks/useAuth.ts";
+import {fetchMeetings} from "../store/meetings/meetingsActionCreator.ts";
 const SignInPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

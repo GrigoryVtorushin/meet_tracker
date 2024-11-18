@@ -3,7 +3,7 @@ import { Badge, type BadgeProps } from './badge.tsx';
 import { cva } from 'class-variance-authority';
 import { type HTMLAttributes, type ReactNode } from 'react';
 
-const avatarVariants = cva('relative box-content flex items-center justify-center overflow-hidden', {
+const avatarVariants = cva('box-content flex items-center justify-center overflow-hidden', {
   variants: {
     shape: {
       circle: 'rounded-full',

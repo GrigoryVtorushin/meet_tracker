@@ -7,6 +7,8 @@ import {useEffect} from "react";
 import {useAppDispatch} from "./hooks/useAppDispatch.ts";
 import {checkAuth} from "./store/auth/authActionCreator.ts";
 import {fetchMeetings} from "./store/meetings/meetingsActionCreator.ts";
+import {useMeetings} from "./hooks/useMeetings.ts";
+import {useAuth} from "./hooks/useAuth.ts";
 
 function App() {
 
