@@ -10,6 +10,7 @@ import {useMeetings} from "../hooks/useMeetings.ts";
 import MeetingsList from "./MeetingsList.tsx";
 import {resetCurrentMeeting, resetMeetingState} from "../store/meetings/meetingsSlice.ts";
 import {fetchMeetings} from "../store/meetings/meetingsActionCreator.ts";
+import AdminPanel from "./AdminPanel.tsx";
 
 const LeftMenu = ({ setShowLeftMenu }) => {
     const dispatch = useAppDispatch()
@@ -23,9 +24,10 @@ const LeftMenu = ({ setShowLeftMenu }) => {
         dispatch(resetMeetingState())
     }
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [showAdminPanel, setShowAdminPanel] = useState(false);
 
     return (
+
         <div className={'px-5 py-8 h-full flex flex-col z-50'}>
             <div className={'flex justify-between'}>
                 <div className={'flex items-center'}>
@@ -51,6 +53,21 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                 }}>
                     Новая расшифровка
                 </Button>
+                <div
+                    hidden={user.role !== 'ADMIN'}
+                >
+                    <Button
+                        variant={"outlined"}
+                        size={"medium"}
+                        className={'w-full mt-4 text-white hover:bg-zinc-400 hover:border-zinc-400 active:bg-zinc-500'}
+                        onClick={() => {
+                            setShowAdminPanel(true)
+                        }}
+                    >
+                        Панель администратора
+                    </Button>
+                </div>
+
             </div>
 
             <MeetingsList className={' mb-5 overflow-y-auto'}/>
@@ -88,6 +105,7 @@ const LeftMenu = ({ setShowLeftMenu }) => {
                 </div>
             </CustomModal>
 
+            <AdminPanel setShowAdminPanel={setShowAdminPanel} showAdminPanel={showAdminPanel}/>
 
         </div>
     );

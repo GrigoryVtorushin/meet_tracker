@@ -34,11 +34,20 @@ export interface IMeeting {
     id: string,
     duration: string,
     file_url: string,
-    diarization: IDiarizationItem[],
-    general_summarization: {
-        text: string
+    diarization: {
+        status: string,
+        result: IDiarizationItem[]
     },
-    speaker_summarization: ISpeakerSummarizationItem[],
+    general_summarization: {
+        status: string,
+        result: {
+            text: string
+        }
+    },
+    speaker_summarization: {
+        status: string,
+        result: ISpeakerSummarizationItem[]
+    },
     author_id: string
 }
 
@@ -75,5 +84,9 @@ const meetingsSlice = createSlice({
     }
 })
 
-export const { fetchMeetingsSuccess, getMeetingByIdSuccess, resetCurrentMeeting, resetMeetingState } = meetingsSlice.actions
+export const { fetchMeetingsSuccess,
+    getMeetingByIdSuccess,
+    resetCurrentMeeting,
+    resetMeetingState,
+} = meetingsSlice.actions
 export default meetingsSlice.reducer

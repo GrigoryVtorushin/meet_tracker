@@ -2,9 +2,12 @@ import {Button} from "./tailframes/button.tsx";
 import {useEffect, useReducer, useState} from "react";
 import $api from "../axios";
 import {Spinner} from "./tailframes/spinner.tsx";
+import {useAppDispatch} from "../hooks/useAppDispatch.ts";
+import {getMeetingByIdSuccess} from "../store/meetings/meetingsSlice.ts";
+import {getMeetingById} from "../store/meetings/meetingsActionCreator.ts";
 
 const controller = new AbortController();
-const UploadFile = ({setProcessingStarted, setRenderUpdate, renderUpdate}) => {
+const UploadFile = ({setRenderUpdate, renderUpdate}) => {
 
     const [fileIsLoaded, setFileIsLoaded] = useState(false);
     const [file, setFile] = useState();
@@ -40,7 +43,8 @@ const UploadFile = ({setProcessingStarted, setRenderUpdate, renderUpdate}) => {
 
     const [progress, setProgress] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(false);
+    const dispatch = useAppDispatch();
 
 
     const upload = async (fileData) => {
@@ -57,7 +61,7 @@ const UploadFile = ({setProcessingStarted, setRenderUpdate, renderUpdate}) => {
             },
         }).then(response => {
             console.log(response.data)
-            setProcessingStarted(true);
+            dispatch(getMeetingById(response.data.id))
             setIsLoading(false);
         }).catch(err => {
             setIsLoading(false);

@@ -17,11 +17,13 @@ const MainPage = () => {
     const {currentMeeting} = useMeetings();
     return isAuth ? (
         <div className={'flex flex-row '}>
-            <div className={`bg-zinc-900 h-lvh max-w-96 transition-all duration-300 ${showLeftMenu ? 'translate-x-0 basis-2/5 fixed md:relative' : '-translate-x-full fixed'} `}>
+            <div className={`z-40 bg-zinc-900 h-lvh max-w-96 transition-all duration-300 ${showLeftMenu ? 'translate-x-0 basis-2/5 fixed lg:relative' : '-translate-x-full fixed'} `}>
                 <LeftMenu
                     setShowLeftMenu={setShowLeftMenu}
                 />
             </div>
+
+
             {!showLeftMenu &&
                 <div className={'m-5 mt-9 fixed'}>
                     <BurgerIcon
@@ -32,17 +34,14 @@ const MainPage = () => {
             }
 
 
-            {currentMeeting
-                ?
-                <div className={'h-lvh w-full mx-0 sm:mx-4'}>
-                    <Meeting className={'flex w-full'} meeting={currentMeeting}/>
-                </div>
-                :
-                <div className={'h-lvh w-full mx-0 sm:mx-4'}>
-                    {processingStarted && <FileProcessing setProcessingStarted={setProcessingStarted} className={`flex w-full h-full `}/>}
-                    {!processingStarted && <UploadFile key={renderUpdate} renderUpdate={renderUpdate} setRenderUpdate={setRenderUpdate} setProcessingStarted={setProcessingStarted}/>}
-                </div>
-            }
+            <div className={'h-lvh w-full mx-0 lg:mx-4'}>
+                {currentMeeting
+                    ?
+                    <Meeting className={'flex w-full'} setProcessingStarted={setProcessingStarted} meeting={currentMeeting}/>
+                    :
+                    <UploadFile key={renderUpdate} renderUpdate={renderUpdate} setRenderUpdate={setRenderUpdate}/>
+                }
+            </div>
 
 
         </div>

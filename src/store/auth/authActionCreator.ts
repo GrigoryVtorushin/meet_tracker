@@ -1,10 +1,10 @@
-import {IUser} from "../../types/interfaces.ts";
+import {IUserAuth} from "../../types/interfaces.ts";
 import {AppDispatch} from "../store.ts";
 import $api, {API_URL} from "../../axios";
 import {loginError, loginRefresh, loginSuccess} from "./authSlice.ts";
 import axios from "axios";
 
-export const login = (data: IUser) => {
+export const login = (data: IUserAuth) => {
     return async (dispatch: AppDispatch) => {
         try {
             const response = await $api.post('/login', {
@@ -26,7 +26,7 @@ export const login = (data: IUser) => {
     }
 }
 
-export const register = (data: IUser) => {
+export const register = (data: IUserAuth) => {
     return async (dispatch: AppDispatch) => {
         try {
             const response = await $api.post('/register', {

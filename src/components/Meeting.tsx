@@ -12,10 +12,13 @@ import CustomModal from "./CustomModal.tsx";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {resetCurrentMeeting} from "../store/meetings/meetingsSlice.ts";
 import DiarizationItem from "./DiarizationItem.tsx";
+import Summarization from "./Summarization.tsx";
+import Lottie from "lottie-react";
+import timeAnimatedIcon from "../assets/time-animated-icon.json";
+import FileProcessing from "./FileProcessing.tsx";
 
-const Meeting = ({className, meeting}) => {
+const Meeting = ({className, meeting, setProcessingStarted}) => {
 
-    const [selectedTab, setSelectedTab] = useState(1)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editTitle, setEditTitle] = useState(false);
     const [title, setTitle] = useState('');
@@ -28,21 +31,29 @@ const Meeting = ({className, meeting}) => {
         await dispatch(updateMeetingTitle(meeting.id, title))
         await dispatch(fetchMeetings())
     }
+    const [showSummarization, setShowSummarization] = useState(false);
+
     return (
         <div className={className} style={{height: '93%'}}>
-            <div className={'m-auto flex mt-10 h-full max-w-7xl w-full'}>
-                <div className={'bg-zinc-900 p-8 rounded-2xl w-2/3'}>
+            <div className={'m-auto lg:flex mt-20 h-full max-w-7xl w-full lg:mt-10'}>
+                <div className={`bg-zinc-900 p-8 rounded-2xl ${meeting.diarization.status === 'IN_PROGRESS' && 'w-full h-full'}`}>
                     <div className={'text-white flex justify-between'}>
                         <input
                             type={"text"}
                             ref={ref}
                             value={title}
-                            className={'bg-zinc-900 text-xl font-semibold sm:text-2xl'}
+                            className={'bg-zinc-900 text-xl font-semibold sm:text-2xl max-w-56 sm:max-w-full'}
                             disabled={!editTitle}
                             onChange={e => setTitle(e.target.value)}
                             onBlur={() => {
                                 setEditTitle(false)
                                 editMeetingTitle();
+                            }}
+                            onKeyUp={(event) => {
+                                if (event.key == 'Enter') {
+                                    setEditTitle(false)
+                                    editMeetingTitle();
+                                }
                             }}
                         />
                         <div className={'flex'}>
@@ -65,52 +76,50 @@ const Meeting = ({className, meeting}) => {
                     <div className={'text-gray-500 flex mt-2'}>
                         <div className={'flex mr-4'}>
                             <CalendarIcon/>
-                            <div className={'ml-1'}>{meeting.updated_at}</div>
+                            <div className={'ml-1'}>{meeting.updated_at.substring(0, 10)}</div>
                         </div>
                         <div className={'flex mr-4'}>
                             <TimeIcon/>
-                            <div className={'ml-1'}>{meeting.duration}</div>
+                            <div className={'ml-1'}>{meeting.duration.substring(0, 8)}</div>
                         </div>
                         <div className={'flex mr-4'}>
                             <UsersIcon/>
-                            <div className={'ml-1'}>Количество спикеров</div>
+                            <div className={'ml-1'}>5</div>
                         </div>
                     </div>
 
-                    <div className={'mt-16'}>
-                        {/*{meeting.diarization.map(d => <DiarizationItem d={d} />)}*/}
-                        <DiarizationItem/>
-                        <DiarizationItem/>
+                    <div className={'mt-16 h-4/5 overflow-y-auto '}>
+                        {
+                            meeting.diarization.status === 'IN_PROGRESS'
+                                ? <FileProcessing />
+
+                                : meeting.diarization.result.map(d => <DiarizationItem d={d} />)
+
+                        }
+
+                        {/*<DiarizationItem/>*/}
+                        {/*<DiarizationItem/>*/}
+                        {/*<DiarizationItem/>*/}
+                        {/*<DiarizationItem/>*/}
+                        {/*<DiarizationItem/>*/}
+                        {/*<DiarizationItem/>*/}
+
                     </div>
+
                 </div>
 
-                <div className={'bg-zinc-900 p-8 rounded-2xl ml-5 w-1/3'}>
-                    <h1 className={'text-xl font-semibold sm:text-2xl mb-6'}>Сводка</h1>
-                    <div className={'flex text-center cursor-pointer'}>
-                        <div className={`w-1/2 p-2 transition duration-300 ${selectedTab === 1 ? 'border-b-2' : 'text-gray-500'}`} onClick={() => setSelectedTab(1)}>Общая</div>
-                        <div className={`w-1/2 p-2 transition duration-300 ${selectedTab === 2 ? 'border-b-2' : 'text-gray-500'}`} onClick={() => setSelectedTab(2)}>По спикерам</div>
-                    </div>
-                    {selectedTab === 1
-                        ? <div>
-                            <div className={'text-gray-500 text-sm mt-10 mb-4'}>
-                                Введите количество предложений для создания краткой сводки расшифровки собрания.
-                                Если ничего не укажете, то будет сформирована подробная сводка.
-                            </div>
-                            <Input
-                                className={'text-black'}
-                                placeholder={'Введите количество предложений.'}
-                            />
-                            <Button className={'w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500 mt-8'}>
-                                Создать сводку
-                            </Button>
-                        </div>
-
-                        : <div>
-
-                        </div>
-                    }
-
+                <div hidden={meeting.diarization.length === 0} className={'w-full bg-zinc-800 py-8 px-6 lg:hidden fixed -bottom-1 rounded-t-xl'}>
+                    <Button className={'w-full bg-white text-black hover:bg-zinc-400 active:bg-zinc-500 active:duration-75'} onClick={() => setShowSummarization(true)}>
+                        Создать сводку
+                    </Button>
                 </div>
+
+                <div hidden={meeting.diarization.length === 0} className={'basis-1/3 min-w-96'}>
+                    <Summarization className={'bg-zinc-900 p-8 rounded-2xl ml-5 h-5/6 max-lg:hidden'}/>
+                    <Summarization setShowSummarization={setShowSummarization} className={`bg-zinc-900 top-0 p-8 w-dvw h-lvh lg:hidden transition-all duration-300 fixed  ${showSummarization ? 'translate-y-0 ' : 'translate-y-full'}`}/>
+                </div>
+
+
             </div>
 
             <CustomModal
