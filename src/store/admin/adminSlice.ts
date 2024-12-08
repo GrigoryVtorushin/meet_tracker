@@ -25,12 +25,16 @@ const adminSlice = createSlice({
             state.total = action.payload.total;
             state.items = action.payload.items;
         },
+        setUsers(state, action: PayloadAction<IAdminStatePayload>){
+            state.items = action.payload.items
+        },
 
     }
 })
 
 export const {
     getUsersSuccess,
+    setUsers
 
 } = adminSlice.actions
 export default adminSlice.reducer

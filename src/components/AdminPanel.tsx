@@ -7,6 +7,7 @@ import {useAdmin} from "../hooks/useAdmin.ts";
 import {getUsers} from "../store/admin/adminActionCreator.ts";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import UserListItem from "./UserListItem.tsx";
+import useDebounce from "../hooks/useDebounce.ts";
 
 const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
 
@@ -15,16 +16,28 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
 
     const [option, setOption] = useState(1);
     const [filter, setFilter] = useState(1);
+    const [searchedEmail, setSearchedEmail] = useState('');
+    const [page, setPage] = useState(1);
+
+    const searchByEmail = useDebounce((value) => {
+        setSearchedEmail(value);
+    }, 400)
+
 
     useEffect(() => {
         switch (filter) {
             case 1:
-                dispatch(getUsers(1, 10));
+                dispatch(getUsers(page, 100, `${searchedEmail && `&email=${searchedEmail}`}`, '', false));
                 break;
-
+            case 2:
+                dispatch(getUsers(page, 100, `${searchedEmail && `&email=${searchedEmail}`}`, '&role=ADMIN', false));
+                break;
+            case 3:
+                dispatch(getUsers(page, 100, `${searchedEmail && `&email=${searchedEmail}`}`, '', true));
+                break;
         }
 
-    }, [filter]);
+    }, [filter, searchedEmail]);
 
     return (
         <div
@@ -64,12 +77,13 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
             </div>
 
             <div className={'flex justify-center p-8 basis-3/4'}>
-                <div className={'w-full max-w-3xl'}>
-                    {option === 1 && <div className={'mt-14'}>
+                <div className={'w-full max-w-5xl mt-14 '}>
+                    {option === 1 && <div className={'h-full'}>
                         <Input
                             className={'text-black'}
                             placeholder={'Найти аккаунт '}
                             startAdornment={<SearchIcon/>}
+                            onChange={(event) => searchByEmail(event.target.value)}
                         />
 
                         <div className={'flex mt-10 gap-6 '}>
@@ -91,11 +105,11 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
                                 onClick={() => setFilter(3)}
                                 className={`border-b-2 cursor-pointer duration-150 ${filter === 3 ? 'border-white' : 'text-gray-500 border-zinc-800'} `}
                             >
-                                Удаленные
+                                Заблокированные
                             </div>
                         </div>
 
-                        <div>
+                        <div className={'h-5/6 overflow-y-auto mt-7'}>
                             {items.map((user) => <UserListItem user={user} key={user.id}/>)}
                         </div>
 

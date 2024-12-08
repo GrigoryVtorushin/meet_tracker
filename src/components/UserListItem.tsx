@@ -2,27 +2,39 @@ import {Checkbox} from "./tailframes/checkbox.tsx";
 import {Button} from "./tailframes/button.tsx";
 import {DeleteIcon} from "../assets/delete-icon.tsx";
 import CustomModal from "./CustomModal.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
-import {changeUserRole, getUsers} from "../store/admin/adminActionCreator.ts";
+import {banUser, changeUserRole} from "../store/admin/adminActionCreator.ts";
+import {setUsers} from "../store/admin/adminSlice.ts";
+import {useAdmin} from "../hooks/useAdmin.ts";
 
 const UserListItem = ({ user }) => {
 
     const dispatch = useAppDispatch();
+
+    const [role, setRole] = useState(user.role);
+
+    const {items} = useAdmin();
     const changeRole = () => {
-        if (user.role === 'ADMIN') {
-            dispatch(changeUserRole(user.id, 'MANAGER'))
+        if (role === 'ADMIN') {
+            setRole('MANAGER')
+            dispatch(changeUserRole(user.id, 'MANAGER'));
         }
         else {
+            setRole('ADMIN')
             dispatch(changeUserRole(user.id, 'ADMIN'))
         }
     }
 
-    const banUser = () => {
-
+    const banUserById = async (id: string) => {
+        setShowConfirmBan(false);
+        await dispatch(banUser(id));
+        await dispatch(setUsers({
+            items: items.filter(i => i.id !== user.id)
+        }));
     }
 
-    const [showConfirmBan, setShowConfirmBan] = useState(false)
+    const [showConfirmBan, setShowConfirmBan] = useState(false);
 
     return (
         <div className={'flex p-2 justify-between'}>
@@ -33,7 +45,7 @@ const UserListItem = ({ user }) => {
                     <div className={'text-sm text-gray-400'}>Зарегистрирован в 20.01.2024</div>
                 </div>
                 <div
-                    hidden={user.role !== 'ADMIN'}
+                    hidden={role !== 'ADMIN'}
                     className={'py-1 px-3 text-xs bg-zinc-700 rounded-2xl ml-4'}
                 >
                     Администратор
@@ -47,12 +59,12 @@ const UserListItem = ({ user }) => {
                     onClick={changeRole}
                 >
                     {
-                        user.role === 'ADMIN' ? <div>Снять права администратора</div> : <div>Назначить администратором</div>
+                        role === 'ADMIN' ? <div>Снять права администратора</div> : <div>Назначить администратором</div>
                     }
                 </Button>
 
                 <DeleteIcon
-                    className={'ml-4 stroke-red-500 hover:stroke-red-700 duration-150 cursor-pointer'}
+                    className={`ml-4 stroke-red-500 hover:stroke-red-700 duration-150 cursor-pointer ${user.is_banned && 'hidden'}`}
                     onClick={() => setShowConfirmBan(true)}
                 />
             </div>
@@ -73,7 +85,7 @@ const UserListItem = ({ user }) => {
                         </Button>
                         <Button
                             className={'sm:w-1/4 bg-red-500 hover:bg-red-700 active:bg-red-800'}
-                            onClick={banUser}
+                            onClick={() => banUserById(user.id)}
                         >
                             Заблокировать
                         </Button>

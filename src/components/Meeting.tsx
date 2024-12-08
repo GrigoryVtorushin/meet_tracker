@@ -7,7 +7,12 @@ import {Tabs} from "./tailframes/tabs/tabs.tsx";
 import {useEffect, useRef, useState} from "react";
 import {Input} from "./tailframes/input.tsx";
 import {Button} from "./tailframes/button.tsx";
-import {deleteMeeting, fetchMeetings, updateMeetingTitle} from "../store/meetings/meetingsActionCreator.ts";
+import {
+    deleteMeeting,
+    fetchMeetings,
+    getMeetingDiarization,
+    updateMeetingTitle
+} from "../store/meetings/meetingsActionCreator.ts";
 import CustomModal from "./CustomModal.tsx";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {resetCurrentMeeting} from "../store/meetings/meetingsSlice.ts";
@@ -16,6 +21,7 @@ import Summarization from "./Summarization.tsx";
 import Lottie from "lottie-react";
 import timeAnimatedIcon from "../assets/time-animated-icon.json";
 import FileProcessing from "./FileProcessing.tsx";
+import FileProcessingError from "./FileProcessingError.tsx";
 
 const Meeting = ({className, meeting, setProcessingStarted}) => {
 
@@ -32,6 +38,22 @@ const Meeting = ({className, meeting, setProcessingStarted}) => {
         await dispatch(fetchMeetings())
     }
     const [showSummarization, setShowSummarization] = useState(false);
+
+    const [renderUpdate, setRenderUpdate] = useState(1);
+
+    useEffect(() => {
+        let interval;
+        if (meeting.diarization.status === 'IN_PROGRESS'){
+            interval = setInterval(() => {
+                dispatch(getMeetingDiarization(meeting.id));
+            }, 10000);
+        }
+        return () => clearInterval(interval)
+    }, [meeting.diarization.status]);
+
+    useEffect(() => {
+        setRenderUpdate(renderUpdate + 1)
+    }, [meeting]);
 
     return (
         <div className={className} style={{height: '93%'}}>
@@ -88,21 +110,12 @@ const Meeting = ({className, meeting, setProcessingStarted}) => {
                         </div>
                     </div>
 
-                    <div className={'mt-16 h-4/5 overflow-y-auto '}>
-                        {
-                            meeting.diarization.status === 'IN_PROGRESS'
-                                ? <FileProcessing />
+                    <div className={'mt-10 h-4/5 overflow-y-auto '} key={renderUpdate}>
+                        {meeting.diarization.status === 'IN_PROGRESS' && <FileProcessing />}
 
-                                : meeting.diarization.result.map(d => <DiarizationItem d={d} />)
+                        {meeting.diarization.status === 'DONE' && meeting.diarization.result.map((d, index) => <DiarizationItem renderUpdate={renderUpdate} setRenderUpdate={setRenderUpdate} key={index} d={d} meetingId={meeting.id}/>)}
 
-                        }
-
-                        {/*<DiarizationItem/>*/}
-                        {/*<DiarizationItem/>*/}
-                        {/*<DiarizationItem/>*/}
-                        {/*<DiarizationItem/>*/}
-                        {/*<DiarizationItem/>*/}
-                        {/*<DiarizationItem/>*/}
+                        {meeting.diarization.status === 'ERROR' && <FileProcessingError/>}
 
                     </div>
 
@@ -115,7 +128,7 @@ const Meeting = ({className, meeting, setProcessingStarted}) => {
                 </div>
 
                 <div hidden={meeting.diarization.length === 0} className={'basis-1/3 min-w-96'}>
-                    <Summarization className={'bg-zinc-900 p-8 rounded-2xl ml-5 h-5/6 max-lg:hidden'}/>
+                    <Summarization className={'bg-zinc-900 p-8 rounded-2xl ml-5 max-lg:hidden h-full'}/>
                     <Summarization setShowSummarization={setShowSummarization} className={`bg-zinc-900 top-0 p-8 w-dvw h-lvh lg:hidden transition-all duration-300 fixed  ${showSummarization ? 'translate-y-0 ' : 'translate-y-full'}`}/>
                 </div>
 

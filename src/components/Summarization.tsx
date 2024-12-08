@@ -17,18 +17,24 @@ const Summarization = ({className, setShowSummarization, hidden}) => {
                 <div className={`w-1/2 p-2 transition duration-300 ${selectedTab === 2 ? 'border-b-2' : 'text-gray-500'}`} onClick={() => setSelectedTab(2)}>По спикерам</div>
             </div>
             {selectedTab === 1
-                ? <div>
-                    <div className={'text-gray-500 text-sm mt-10 mb-4'}>
-                        Введите количество предложений для создания краткой сводки расшифровки собрания.
-                        Если ничего не укажете, то будет сформирована подробная сводка.
+                ? <div className={'flex flex-col justify-between h-5/6'}>
+                    <div>
+                        <div className={'text-gray-500 text-sm mt-10 mb-4'}>
+                            Введите количество предложений для создания краткой сводки расшифровки собрания.
+                            Если ничего не укажете, то будет сформирована подробная сводка.
+                        </div>
+                        <Input
+                            className={'text-black'}
+                            placeholder={'Введите количество предложений.'}
+                        />
                     </div>
-                    <Input
-                        className={'text-black'}
-                        placeholder={'Введите количество предложений.'}
-                    />
-                    <Button className={'w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500 mt-8'}>
+
+
+                    <Button className={'w-full text-black bg-white hover:bg-zinc-400 active:bg-zinc-500 '}>
                         Создать сводку
                     </Button>
+
+
                 </div>
 
                 : <div>

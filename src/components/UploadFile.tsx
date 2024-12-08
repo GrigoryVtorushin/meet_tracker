@@ -4,7 +4,7 @@ import $api from "../axios";
 import {Spinner} from "./tailframes/spinner.tsx";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import {getMeetingByIdSuccess} from "../store/meetings/meetingsSlice.ts";
-import {getMeetingById} from "../store/meetings/meetingsActionCreator.ts";
+import {fetchMeetings, getMeetingById} from "../store/meetings/meetingsActionCreator.ts";
 
 const controller = new AbortController();
 const UploadFile = ({setRenderUpdate, renderUpdate}) => {
@@ -62,6 +62,7 @@ const UploadFile = ({setRenderUpdate, renderUpdate}) => {
         }).then(response => {
             console.log(response.data)
             dispatch(getMeetingById(response.data.id))
+            dispatch(fetchMeetings())
             setIsLoading(false);
         }).catch(err => {
             setIsLoading(false);

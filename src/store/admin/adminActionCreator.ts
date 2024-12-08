@@ -2,17 +2,16 @@ import {AppDispatch} from "../store.ts";
 import $api from "../../axios";
 import {getUsersSuccess} from "./adminSlice.ts";
 
-export const getUsers = (page: number, perPage: number) => {
+export const getUsers = (page: number, perPage: number, email: string, role: '&role=MANAGER' | '&role=ADMIN' | '', is_banned: boolean) => {
     return async (dispatch: AppDispatch) => {
         try {
-            const response = await $api.get(`/users?page=${page}&per_page=${perPage}`);
+            const response = await $api.get(`/users?page=${page}&per_page=${perPage}${email}${role}&is_banned=${is_banned}`);
             dispatch(getUsersSuccess({
                 page: response.data.page,
                 per_page: response.data.per_page,
                 total: response.data.total,
                 items: response.data.items
             }))
-            console.log(response.data)
         } catch (error) {
             console.log(error)
         }

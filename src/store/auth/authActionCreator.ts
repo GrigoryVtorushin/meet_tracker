@@ -11,6 +11,7 @@ export const login = (data: IUserAuth) => {
                 email: data.email,
                 password: data.password
             })
+
             dispatch(loginSuccess({
                 accessToken: response.data.access_token,
                 user: response.data.user,
@@ -20,6 +21,11 @@ export const login = (data: IUserAuth) => {
             if (error.status === 422){
                 dispatch(loginError({
                     logError: 'Неверные данные аккаунта'
+                }))
+            }
+            if (error.response.data.detail === 'User is banned'){
+                dispatch(loginError({
+                    logError: 'Вы заблокированы в сервисе'
                 }))
             }
         }

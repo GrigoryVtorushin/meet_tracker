@@ -80,6 +80,10 @@ const meetingsSlice = createSlice({
         resetMeetingState (state) {
             state.meetings = []
             state.currentMeeting = null
+        },
+
+        getMeetingDiarizationSuccess (state, action: PayloadAction<IMeetingsStatePayload>) {
+            state.currentMeeting.diarization = action.payload
         }
     }
 })
@@ -88,5 +92,7 @@ export const { fetchMeetingsSuccess,
     getMeetingByIdSuccess,
     resetCurrentMeeting,
     resetMeetingState,
+    getMeetingDiarizationSuccess,
+
 } = meetingsSlice.actions
 export default meetingsSlice.reducer
