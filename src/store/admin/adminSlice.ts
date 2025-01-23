@@ -8,11 +8,42 @@ interface IAdminStatePayload {
     items: IUser[]
 }
 
+interface ISttModelsPayload {
+    name: string,
+    description: string,
+    types: [
+        {
+            name: string,
+            is_downloaded: boolean
+        }
+    ]
+}
+
+interface IllmModel {
+    name: string,
+    modified_at: string,
+    size: number,
+    digest: string,
+    details: {
+        format: string,
+        family: string,
+        families: string[],
+        parameter_size: string,
+        quantization_level: string,
+    }
+}
+
+interface ILlmModelsPayload {
+    models: IllmModel[]
+}
+
 const initialState: IAdminStatePayload = {
     page: 1,
     per_page: 10,
     total: 1,
-    items: []
+    items: [],
+    sttModels: [],
+    llmModels: []
 }
 
 const adminSlice = createSlice({
@@ -28,13 +59,21 @@ const adminSlice = createSlice({
         setUsers(state, action: PayloadAction<IAdminStatePayload>){
             state.items = action.payload.items
         },
+        setSttModels(state, action: PayloadAction<ISttModelsPayload[]>) {
+            state.sttModels = action.payload
+        },
+        setLlmModels(state, action: PayloadAction<ILlmModelsPayload>) {
+            state.llmModels = action.payload.models
+        },
 
     }
 })
 
 export const {
     getUsersSuccess,
-    setUsers
+    setUsers,
+    setSttModels,
+    setLlmModels
 
 } = adminSlice.actions
 export default adminSlice.reducer

@@ -84,7 +84,15 @@ const meetingsSlice = createSlice({
 
         getMeetingDiarizationSuccess (state, action: PayloadAction<IMeetingsStatePayload>) {
             state.currentMeeting.diarization = action.payload
-        }
+        },
+
+        setMeetingGeneralSummarization (state, action: PayloadAction<IMeetingsStatePayload>) {
+            state.currentMeeting.general_summarization = action.payload
+        },
+
+        setMeetingSpeakerSummarization (state, action: PayloadAction<IMeetingsStatePayload>) {
+            state.currentMeeting.speaker_summarization = action.payload
+        },
     }
 })
 
@@ -93,6 +101,7 @@ export const { fetchMeetingsSuccess,
     resetCurrentMeeting,
     resetMeetingState,
     getMeetingDiarizationSuccess,
-
+    setMeetingSpeakerSummarization,
+    setMeetingGeneralSummarization,
 } = meetingsSlice.actions
 export default meetingsSlice.reducer

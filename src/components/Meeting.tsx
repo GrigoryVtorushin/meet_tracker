@@ -41,7 +41,10 @@ const Meeting = ({className, meeting, setProcessingStarted}) => {
 
     const [renderUpdate, setRenderUpdate] = useState(1);
 
+
     useEffect(() => {
+        dispatch(getMeetingDiarization(meeting.id));
+        console.log(1)
         let interval;
         if (meeting.diarization.status === 'IN_PROGRESS'){
             interval = setInterval(() => {
@@ -104,13 +107,10 @@ const Meeting = ({className, meeting, setProcessingStarted}) => {
                             <TimeIcon/>
                             <div className={'ml-1'}>{meeting.duration.substring(0, 8)}</div>
                         </div>
-                        <div className={'flex mr-4'}>
-                            <UsersIcon/>
-                            <div className={'ml-1'}>5</div>
-                        </div>
+
                     </div>
 
-                    <div className={'mt-10 h-4/5 overflow-y-auto '} key={renderUpdate}>
+                    <div className={'mt-10 h-4/5 max-lg:mb-10 overflow-y-auto '} key={renderUpdate}>
                         {meeting.diarization.status === 'IN_PROGRESS' && <FileProcessing />}
 
                         {meeting.diarization.status === 'DONE' && meeting.diarization.result.map((d, index) => <DiarizationItem renderUpdate={renderUpdate} setRenderUpdate={setRenderUpdate} key={index} d={d} meetingId={meeting.id}/>)}

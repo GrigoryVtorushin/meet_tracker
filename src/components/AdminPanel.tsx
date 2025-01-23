@@ -4,14 +4,14 @@ import {Input} from "./tailframes/input.tsx";
 import {SearchIcon} from "../assets/search-icon.tsx";
 import {Select} from "./tailframes/select/select.tsx";
 import {useAdmin} from "../hooks/useAdmin.ts";
-import {getUsers} from "../store/admin/adminActionCreator.ts";
+import {getLlmModels, getSttModels, getUsers} from "../store/admin/adminActionCreator.ts";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
 import UserListItem from "./UserListItem.tsx";
 import useDebounce from "../hooks/useDebounce.ts";
 
 const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
 
-    const { items } = useAdmin();
+    const { items, llmModels, sttModels } = useAdmin();
     const dispatch = useAppDispatch();
 
     const [option, setOption] = useState(1);
@@ -38,6 +38,11 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
         }
 
     }, [filter, searchedEmail]);
+
+    useEffect(() => {
+        dispatch(getSttModels());
+        dispatch(getLlmModels());
+    }, []);
 
     return (
         <div
@@ -123,19 +128,16 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
                                 <div id={'speech-to-text'} className={'w-40'}>
                                     <Select
                                         dropdownPortalContainerId="speech-to-text"
-                                        value={'whisper'}
-                                        options={[
-                                            {
-                                                label: 'Whisper',
-                                                value: 'whisper'
-                                            },
-                                            {
-                                                label: 'Whisper1',
-                                                value: 'whisper1'
+                                        value={sttModels[0].name}
+                                        options={sttModels.map(model => {
+                                            return {
+                                                label: model.name,
+                                                value: model.name
                                             }
-                                        ]}
+                                        })}
                                     />
                                 </div>
+
 
                             </div>
                         </div>
@@ -147,17 +149,13 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
                                 <div id={'llm'} className={'w-40'}>
                                     <Select
                                         dropdownPortalContainerId="llm"
-                                        value={'GPT-4o'}
-                                        options={[
-                                            {
-                                                label: 'GPT-4o',
-                                                value: 'GPT-4o'
-                                            },
-                                            {
-                                                label: 'GPT-4',
-                                                value: 'GPT-4'
+                                        value={llmModels.models[0].name}
+                                        options={llmModels.models.map(model => {
+                                            return {
+                                                label: model.name,
+                                                value: model.name
                                             }
-                                        ]}
+                                        })}
                                     />
                                 </div>
 

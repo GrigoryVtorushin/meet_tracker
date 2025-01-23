@@ -4,7 +4,7 @@ import {DeleteIcon} from "../assets/delete-icon.tsx";
 import CustomModal from "./CustomModal.tsx";
 import {useState} from "react";
 import {useAppDispatch} from "../hooks/useAppDispatch.ts";
-import {banUser, changeUserRole} from "../store/admin/adminActionCreator.ts";
+import {banUser, changeUserRole, unBanUser} from "../store/admin/adminActionCreator.ts";
 import {setUsers} from "../store/admin/adminSlice.ts";
 import {useAdmin} from "../hooks/useAdmin.ts";
 
@@ -34,6 +34,13 @@ const UserListItem = ({ user }) => {
         }));
     }
 
+    const unBan = async (id: string) => {
+        await dispatch(unBanUser(id));
+        await dispatch(setUsers({
+            items: items.filter(i => i.id !== user.id)
+        }));
+    }
+
     const [showConfirmBan, setShowConfirmBan] = useState(false);
 
     return (
@@ -53,7 +60,7 @@ const UserListItem = ({ user }) => {
             </div>
 
             <div className={'flex'}>
-                <Button
+                {!user.is_banned && <Button
                     className={'text-white duration-150 hover:bg-zinc-400 hover:border-zinc-400 active:bg-zinc-500'}
                     variant={"outlined"}
                     onClick={changeRole}
@@ -61,7 +68,15 @@ const UserListItem = ({ user }) => {
                     {
                         role === 'ADMIN' ? <div>Снять права администратора</div> : <div>Назначить администратором</div>
                     }
-                </Button>
+                </Button>}
+
+                {user.is_banned && <Button
+                    className={'text-white duration-150 hover:bg-zinc-400 hover:border-zinc-400 active:bg-zinc-500'}
+                    variant={"outlined"}
+                    onClick={() => unBan(user.id)}
+                >
+                   Разблокировать
+                </Button>}
 
                 <DeleteIcon
                     className={`ml-4 stroke-red-500 hover:stroke-red-700 duration-150 cursor-pointer ${user.is_banned && 'hidden'}`}

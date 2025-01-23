@@ -9,6 +9,7 @@ import {checkAuth} from "./store/auth/authActionCreator.ts";
 import {fetchMeetings} from "./store/meetings/meetingsActionCreator.ts";
 import {useMeetings} from "./hooks/useMeetings.ts";
 import {useAuth} from "./hooks/useAuth.ts";
+import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
 
 function App() {
 
@@ -24,9 +25,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={'/'} element={<MainPage/>}/>
-        <Route path={'/signin'} element={<SignInPage/>}/>
-        <Route path={'/signup'} element={<SignUpPage/>}/>
+          <Route path={'/'} element={<MainPage/>}/>
+          <Route path={'/signin'} element={<SignInPage/>}/>
+          <Route path={'/signup'} element={<SignUpPage/>}/>
+          <Route path={'/reset_password'} element={<ResetPasswordPage/>}/>
       </Routes>
     </BrowserRouter>
   )
