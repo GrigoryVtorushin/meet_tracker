@@ -8,12 +8,15 @@ import {
     createMeetingGeneralSummarization,
     createMeetingSpeakerSummarization
 } from "../store/meetings/meetingsActionCreator.ts";
+import DiarizationItem from "./DiarizationItem.tsx";
 
 const Summarization = ({className, setShowSummarization, hidden}) => {
     const [selectedTab, setSelectedTab] = useState(1);
     const dispatch = useAppDispatch();
 
     const [sentencesCount, setSentencesCount] = useState(0);
+
+    const [renderUpdate, setRenderUpdate] = useState(1);
 
     const { currentMeeting } = useMeetings();
 
@@ -66,8 +69,15 @@ const Summarization = ({className, setShowSummarization, hidden}) => {
 
                 : currentMeeting.speaker_summarization.status === "DONE"
                     ?
-                    <div className={'flex flex-col justify-between h-5/6'}>
-
+                    <div className={'flex flex-col mt-8 h-5/6'}>
+                        {currentMeeting.speaker_summarization.result.map(item =>
+                            <DiarizationItem
+                                d={item}
+                                meetingId={currentMeeting.id}
+                                renderUpdate={renderUpdate}
+                                setRenderUpdate={setRenderUpdate}
+                            />
+                        )}
                     </div>
 
                     :

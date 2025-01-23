@@ -54,7 +54,7 @@ const DiarizationItem = ({ d, meetingId, renderUpdate, setRenderUpdate }) => {
                             }, 0)
                         }}
                     />
-                    <div className={'text-gray-400 text-xs'}>{d.starts_at}</div>
+                    <div className={'text-gray-400 text-xs'}>{d.starts_at && d.starts_at}</div>
                 </div>
                 <div className={'font-light'}>
                     {d.text}

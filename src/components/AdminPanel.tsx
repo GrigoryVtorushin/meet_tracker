@@ -125,7 +125,7 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
                             <h1 className={'font-semibold text-xl'}>Speech to text</h1>
                             <div className={'flex justify-between mt-5 py-2'}>
                                 <div>Модель</div>
-                                <div id={'speech-to-text'} className={'w-40'}>
+                                <div id={'speech-to-text'} className={'w-64'}>
                                     <Select
                                         dropdownPortalContainerId="speech-to-text"
                                         value={sttModels[0].name}
@@ -146,7 +146,7 @@ const AdminPanel = ({setShowAdminPanel, showAdminPanel}) => {
                             <h1 className={'font-semibold text-xl'}>LLM модель</h1>
                             <div className={'flex justify-between mt-5 py-2'}>
                                 <div>Модель</div>
-                                <div id={'llm'} className={'w-40'}>
+                                <div id={'llm'} className={'w-64'}>
                                     <Select
                                         dropdownPortalContainerId="llm"
                                         value={llmModels.models[0].name}
